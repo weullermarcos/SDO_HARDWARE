@@ -1,0 +1,251 @@
+[Project]
+FileName=GSM Shield - SIM900.dev
+Name=GSM Shield - SIM900
+Type=2
+Ver=1
+ObjFiles=
+Includes=
+Libs=
+PrivateResource=GSM_Shield_-_SIM900_private.rc
+ResourceIncludes=
+MakeIncludes=
+Compiler=
+CppCompiler=
+Linker= -lgmon
+IsCpp=1
+Icon=
+ExeOutput=
+ObjectOutput=
+LogOutput=
+LogOutputEnabled=0
+OverrideOutput=0
+OverrideOutputName=
+HostApplication=
+Folders=
+CommandLine=
+UseCustomMakefile=0
+CustomMakefile=
+IncludeVersionInfo=0
+SupportXPThemes=0
+CompilerSet=0
+CompilerSettings=000000000000000000000000000
+UnitCount=0
+
+[VersionInfo]
+Major=1
+Minor=0
+Release=0
+Build=0
+LanguageID=1033
+CharsetID=1252
+CompanyName=
+FileVersion=
+FileDescription=Developed using the Dev-C++ IDE
+InternalName=
+LegalCopyright=
+LegalTrademarks=
+OriginalFilename=
+ProductName=
+ProductVersion=
+AutoIncBuildNr=0
+SyncProduct=1
+
+[Unit1]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\call.cpp
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit2]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\call.h
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit3]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\gps.cpp
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit4]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\gps.h
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit5]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\GSM.cpp
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit6]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\GSM.h
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit7]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\HWSerial.cpp
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit8]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\HWSerial.h
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit9]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\inetGSM.cpp
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit10]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\inetGSM.h
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit11]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\LOG.cpp
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit12]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\LOG.h
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit13]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\SIM900.cpp
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit14]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\SIM900.h
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit15]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\sms.cpp
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit16]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\sms.h
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit17]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\Streaming.h
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit18]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\WideTextFinder.cpp
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit19]
+FileName=..\..\..\..\..\Softwares Eng\arduino-1.0.5\libraries\GSMSHIELD\WideTextFinder.h
+CompileCpp=1
+Folder=GSM Shield - SIM900
+Compile=1
+Link=1
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
+[Unit20]
+FileName=Untitled1.rc
+Folder=GSM Shield - SIM900
+Compile=1
+Link=0
+Priority=1000
+OverrideBuildCmd=0
+BuildCmd=
+
