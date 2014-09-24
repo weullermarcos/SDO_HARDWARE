@@ -1,5 +1,5 @@
 /* 
-Autor: Weuller Marcos da Silva Santos
+Autores: Eduardo/Weuller
 Fonte:http://abedulengenharia.blogspot.com.br/2011/07/arduino-y-teclado-3x4.html
 
        Coluna 1    Coluna 2    Coluna 3
@@ -44,7 +44,7 @@ char numberKeys[ROWS][COLS] = {
     { '1','2','3' },
     { '4','5','6' },
     { '7','8','9' },
-    { '.','0','backSpace' }
+    { '.','0','#' }
 };
 
 //Pinos do Arduino correspondentes as linhas
