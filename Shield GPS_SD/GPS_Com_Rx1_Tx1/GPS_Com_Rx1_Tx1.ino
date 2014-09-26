@@ -5,8 +5,6 @@ FUNCIONANDO PARA O MEGA 2560
 */
  
 #include <nmea.h>
-#include <SPI.h>
-#include <SD.h>
 
 NMEA gps(ALL);
 

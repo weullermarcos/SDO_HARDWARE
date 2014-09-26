@@ -33,7 +33,7 @@ Disposição dos Pinos:
 // include the library code:
 #include <LiquidCrystal.h>
 
-/*Configuração para Arduino MEGA 2560
+//*Configuração para Arduino MEGA 2560
 byte RS     = 53;
 byte ENABLE = 51;
 byte DB4    = 49;
@@ -43,7 +43,7 @@ byte DB7    = 43;
 
 //*/
 
-//*Configuração para Arduino UNO/DUEMILANOVE
+/*Configuração para Arduino UNO/DUEMILANOVE
 byte RS     = 2;
 byte ENABLE = 3;
 byte DB4    = 4;

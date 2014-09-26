@@ -139,6 +139,7 @@ int nmeaStringCount = 0;
 
 /************ ASSINATURA DAS FUNÇÕES ***********************/
 void initialDisplayMessage();//Mostra msg inicial no Display LCD
+void fixedDisplayMessage();  //Mensagem com a linha que está sendo feita
 void insertLineNumber(char receivedNumber); //Inserir linha
 void backSpace(); //Função para apagar caracteres
 void removeCharacters(); //função para remover caracteres /n e /t na leitura dos dados do cartão SD
@@ -181,6 +182,9 @@ void setup(){
       }
     }
   }
+  
+  fixedDisplayMessage();
+  
   Serial.println(lineNumber);
   
   getLocalSDData();//Após pegar a linha busca dados armazenados no cartão SD
@@ -269,6 +273,14 @@ void initialDisplayMessage(){
   lcd.clear(); //Limpando Display
   lcd.setCursor(0, 0);
   lcd.print("Digite a Linha:"); //Escrevendo no LCD
+}
+
+void fixedDisplayMessage(){
+  lcd.clear(); //Limpando Display
+  lcd.setCursor(0, 0); 
+  lcd.print("Linha:"); 
+  lcd.setCursor(0, 1);
+  lcd.print(lineNumber);
 }
 
 void insertLineNumber(char receivedNumber){
