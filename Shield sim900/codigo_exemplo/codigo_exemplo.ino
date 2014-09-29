@@ -67,10 +67,12 @@ void setup()
 void loop() 
 {
   if(millis() < lastReadMillis || millis() < lastUploadMillis){
+      DEBUG.println("Entrou no primeiro IF");
       lastReadMillis = millis();       
       lastUploadMillis = millis();
   }
   if(millis() - lastReadMillis > HOWOFTEN_READ){
+    DEBUG.println("Entrou no segundo IF");
     lastReadMillis = millis();
     //readSensors();
     readings[0] = analogRead(A0) / 45;
@@ -138,12 +140,18 @@ byte GSMBoot(){
 }
 
 byte uploadData(){
+  
+      DEBUG.println("Tentando UPLOAD de dados");
       byte number_uploaded = 0;
       char buf[150];
       
       buf[0] = 0;
       sprintf(buf, "{\"type\":\"weather\",\"id\":\"W123\",\"temperature\":%d,\"humidity\":%d,\"light\":%d, \"power\":%d, \"cox\":%d,\"rain\":%d, \"lat\":-25.746, \"lon\":28.267}",
          readings[0], readings[1], readings[2], readings[3], readings[4], readings[5] );
+      
+      //sprintf(buf, "{\"type\":\"weather\",\"id\":\"W123\",\"temperature\":%d,\"humidity\":%d,\"light\":%d, \"power\":%d, \"cox\":%d,\"rain\":%d, \"lat\":-25.746, \"lon\":28.267}",
+         //readings[0], readings[1], readings[2], readings[3], readings[4], readings[5] );
+      
       #ifdef DEBUG_GSM
          DEBUG.println(buf);
       #endif   
@@ -172,7 +180,7 @@ byte uploadData(){
     return(number_uploaded);  
 }
 
-
+/* */
 int smarttPUT( char* parameters, char* result, int resultlength)
 {
   int num_char;
@@ -225,7 +233,7 @@ void doDisconnect(){
 
 /************************************ RS 485 *********************************/
 
-
+/*
 void readSensors(){
   //RS485.begin(9600);
   for(int i=0;i<CHANNEL_COUNT; i++) {
@@ -233,5 +241,6 @@ void readSensors(){
      readings[i] = val*(1-ALPHA) + readings[i]*ALPHA; 
   }   
 }
+*/
 
 
