@@ -1,0 +1,25 @@
+
+
+
+--Conexão Simples:
+-Comandos:
+
+
+AT+CIPMUX=<n>  ----> Usado para selecionar modo da conexao TCP/IP, quando n=0 conexão simples, quando n=1 multiplas conexões, por padrão usa se 0
+
+
+AT+CIPMODE=<n> ----> Usado para selecionar modo TCP/IP,
+quando n=0 modo nao transparente, quando n=1 modo transparente, por padrão usa se 0
+
+
+
+
+
+
+
+
+
+
+
+
+
