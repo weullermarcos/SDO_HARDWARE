@@ -12,6 +12,7 @@ float latitude;
 float longitude;
 float hora;
 float velocidade;
+String data;
 
 void setup()
 {
@@ -19,15 +20,87 @@ void setup()
   Serial1.begin(38400);
   Serial.println("start");
 }
- 
+
+boolean isGPRMC = false;
+byte commaNumber = 0;
+byte countGPRMC = 0;
+byte formatDate = 0;
+
+void getDate(char leitura)
+{
+  if(leitura == '$' && isGPRMC == false)
+    {
+      countGPRMC ++;
+    }
+    else if (leitura == 'G' && isGPRMC == false)
+    {
+      countGPRMC ++;
+    }
+    else if (leitura == 'P' && isGPRMC == false)
+    {
+      countGPRMC ++;
+    }
+    else if (leitura == 'R' && isGPRMC == false)
+    {
+      countGPRMC ++;
+    }
+    else if (leitura == 'M' && isGPRMC == false)
+    {
+      countGPRMC ++;
+    }
+    else if (leitura == 'C' && isGPRMC == false)
+    {
+      countGPRMC ++;
+    }
+    else
+    {
+      countGPRMC = 0;
+    }
+    
+    if(countGPRMC == 6) //encontrou o cabeçalho $GPRMC
+    {
+       data = "";
+       isGPRMC = true;
+    }
+    
+    if(leitura == ',' && isGPRMC) //contando o numero de virgulas para achar a data apos a nona virgula
+    {
+      commaNumber++;
+    }
+    
+    if(commaNumber == 9) // a data se encontra após a nona virgula
+    {
+      if(leitura != ',') //para não pegar a virgula que antecede a data
+      {  
+        if(formatDate == 2)
+          data += "/";
+        if(formatDate == 4)
+          data += "/";
+          
+        data += leitura;
+        formatDate ++;
+      }
+    }
+    
+    if(commaNumber == 10) //para de coletar data quando achar a próxima virgula
+    {
+      commaNumber = 0;
+      isGPRMC = false;
+      countGPRMC = 0;
+      formatDate = 0;
+    }
+}
+
 void loop()
 {
-  
+  //$GPRMC,225446,A,4916.45,N,12311.12,W,000.5,054.7,191194,020.3,E*68
   if (Serial1.available() > 0 ) {
     
     //  Lê caracteres vindos do GPS
     char leitura = Serial1.read();
-    //Serial.println(leitura);
+    
+    getDate(leitura);
+    
     //  Verifica se o valor recebido e uma sentença GPS valida
     if (gps.decode(leitura)) {
        Serial.println("Decodificou");
@@ -45,6 +118,9 @@ void loop()
         
         Serial.print("Longitude: ");
         Serial.println(longitude, DEC);//Recupera Longitude
+        
+        Serial.print("Data: ");
+        Serial.println(data);//Recupera data
         
         Serial.print("Hora: ");
         Serial.println(hora);//Recupera hora

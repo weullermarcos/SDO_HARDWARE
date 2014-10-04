@@ -5,7 +5,6 @@ Usando Tx =0 e Rx = 1
 FUNCIONANDO PARA O MEGA 2560
 */
  
-#include <SD.h>
 #include <nmea.h>
 
 NMEA gps(ALL);
@@ -14,6 +13,7 @@ float latitude;
 float longitude;
 float hora;
 float velocidade;
+String data;
 
 void setup()
 {

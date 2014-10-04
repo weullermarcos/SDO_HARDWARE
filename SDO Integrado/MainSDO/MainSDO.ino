@@ -133,11 +133,24 @@ String nOnibus;
 String nPassageiros;
 
 /************ INICIO - BLOCO DE CONFIGURAÇÃO DE VARIÁVEIS PARA CARTÃO SD ***********************/
+
 String dataString = "";
 int nmeaStringCount = 0;
+
 /************ FIM - BLOCO DE CONFIGURAÇÃO DE VARIÁVEIS PARA CARTÃO SD ***********************/
 
+/************ INICIO - BLOCO DE CONFIGURAÇÃO DE VARIÁVEIS PARA LER DATA ***********************/
+
+String date;
+boolean isGPRMC = false;
+byte commaNumber = 0;
+byte countGPRMC = 0;
+byte formatDate = 0;
+
+/************ FIM - BLOCO DE CONFIGURAÇÃO DE VARIÁVEIS PARA LER DATA ***********************/
+
 /************ ASSINATURA DAS FUNÇÕES ***********************/
+
 void initialDisplayMessage();//Mostra msg inicial no Display LCD
 void fixedDisplayMessage();  //Mensagem com a linha que está sendo feita
 void insertLineNumber(char receivedNumber); //Inserir linha
@@ -145,8 +158,9 @@ void backSpace(); //Função para apagar caracteres
 void removeCharacters(); //função para remover caracteres /n e /t na leitura dos dados do cartão SD
 void getLocalSDData(); //pega os dados gravados no cartão SD
 void saveNmeaFile(String data); //função para salvar arquivo nmea
-void blinkSucessLed();
-void blinkErrorLed();
+void blinkSucessLed(); //função para piscar led sinalizando sucesso de leitura de dados do GPS
+void blinkErrorLed(); //função para piscar led sinalizando erro de leitura de dados do GPS
+void getDate(char leitura); //Função para leitura e formatação de data
 
 void setup(){
   
@@ -203,7 +217,8 @@ void loop(){
     
     // Lê caracteres vindos do GPS na porta Serial 1
     char leitura = Serial1.read();
-    //Serial.println(leitura);
+    
+    getDate(leitura);
     
     dataString += String(leitura);
     nmeaStringCount ++;
@@ -232,6 +247,9 @@ void loop(){
         
         Serial.print("Longitude: ");
         Serial.println(longitude, DEC);//Recupera Longitude
+        
+        Serial.print("Data: ");
+        Serial.println(date);//Recupera data
         
         Serial.print("Hora: ");
         Serial.println(hora);//Recupera hora
@@ -402,4 +420,70 @@ void blinkErrorLed()
 }
 
 
+void getDate(char leitura) //Função para leitura e formatação de data
+{
+  //$GPRMC,225446,A,4916.45,N,12311.12,W,000.5,054.7,191194,020.3,E*68
+    
+  if(leitura == '$' && isGPRMC == false)
+    {
+      countGPRMC ++;
+    }
+    else if (leitura == 'G' && isGPRMC == false)
+    {
+      countGPRMC ++;
+    }
+    else if (leitura == 'P' && isGPRMC == false)
+    {
+      countGPRMC ++;
+    }
+    else if (leitura == 'R' && isGPRMC == false)
+    {
+      countGPRMC ++;
+    }
+    else if (leitura == 'M' && isGPRMC == false)
+    {
+      countGPRMC ++;
+    }
+    else if (leitura == 'C' && isGPRMC == false)
+    {
+      countGPRMC ++;
+    }
+    else
+    {
+      countGPRMC = 0;
+    }
+    
+    if(countGPRMC == 6) //encontrou o cabeçalho $GPRMC
+    {
+       date = "";
+       isGPRMC = true;
+    }
+    
+    if(leitura == ',' && isGPRMC) //contando o numero de virgulas para achar a data apos a nona virgula
+    {
+      commaNumber++;
+    }
+    
+    if(commaNumber == 9) // a data se encontra após a nona virgula
+    {
+      if(leitura != ',') //para não pegar a virgula que antecede a data
+      {  
+        if(formatDate == 2)
+          date += "/";
+        if(formatDate == 4)
+          date += "/";
+          
+        date += leitura;
+        formatDate ++;
+      }
+    }
+    
+    if(commaNumber == 10) //para de coletar data quando achar a próxima virgula
+    {
+      commaNumber = 0;
+      isGPRMC = false;
+      countGPRMC = 0;
+      formatDate = 0;
+    }
+}
 
