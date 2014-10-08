@@ -1,9 +1,4 @@
 
-      //Serial1.println("AT+CSTT=\"java.claro.com.br\",\"claro\",\"claro\"");
-      //Serial1.println("AT+CSTT=\"wap.claro.com.br\",\"claro\",\"claro\"");
-      //Serial1.println("AT+CSTT=\"streaming.claro.com.br\",\"claro\",\"claro\"");
-      //Serial1.println("AT+CSTT=\"mms.claro.com.br\",\"claro\",\"claro\"");
-      //Serial1.println("AT+CSTT=\"bandalarga.claro.com.br\",\"claro\",\"claro\"");
 
 void setup()
 {
@@ -14,12 +9,10 @@ void setup()
   
   conexaoHTTPPOST();
   //conexaoHTTPGET();
-  //conexaoHTTPGETBySite();
 }
 char aux;
 void loop ()
 {
-  //conexaoHTTP();
   //conexaoTCP();
 }
 
@@ -86,20 +79,35 @@ void conexaoHTTPPOST()
     
     Serial.println("Comando: AT+HTTPPARA"); 
     //Serial1.println("AT+HTTPPARA=\"URL\",\"www.sim.com\"");
-    //Serial1.println("AT+HTTPPARA=\"URL\",\"sdo-server.herokuapp.com\""); 
     Serial1.println("AT+HTTPPARA=\"URL\",\"sdo-server.herokuapp.com/save/bus/position\"");  
     delay(10000);
     Serial.println("Resultado:");  
     ShowSerialData();
     Serial.println("");    
-/*
+
+    Serial.println("Comando: AT+HTTPPARA");  
+    //Serial1.println("AT+HTTPPARA=\"CONTENT\",\"application/x-www-form-urlencoded\"");
+    Serial1.println("AT+HTTPPARA=\"CONTENT\",\"application/json\"");   
+    delay(2000);
+    Serial.println("Resultado:");  
+    ShowSerialData();
+    Serial.println(""); 
+    
     Serial.println("Comando: AT+HTTPDATA"); 
     Serial1.println("AT+HTTPDATA=100,10000"); 
     delay(10000);
     Serial.println("Resultado:");  
     ShowSerialData();
     Serial.println("");
-*/
+    
+    Serial.println("MANDANDO JSON:");  
+    Serial1.println("json={\"latitude\":\"-16.694177\", \"longitude\":\"-48.790577\", \"date\":\"07/10/2014 03:51:00\", \"speed\":\"55\", \"positionSense\":\"TO_END_POINT | TO_START_POINT\", \"bus\": {\"licensePlate\": \"OVR-5555\", \"busNumber\":\"55577777\", \"capacity\":\"55\", \"itinerary\": { \"routeNumber\": \"921\", \"startPoint\": \"Setor Q\", \"endPoint\": \"W3 Sul\"}}}");   
+    delay(2000);
+    Serial.println("Resultado:");  
+    ShowSerialData();
+    Serial.println(""); 
+    
+    
     /*Define CACTION da requisição HTTP como POST*/
     Serial.println("Comando: AT+HTTPACTION=1"); 
     Serial1.println("AT+HTTPACTION=1"); 
@@ -130,6 +138,7 @@ void conexaoHTTPGET()
 {  
     Serial.println("---------GET---------");
     
+
     Serial.println("Comando: AT+SAPBR=3,1,\"Contype\",\"GPRS\"");
     Serial1.println("AT+SAPBR=3,1,\"Contype\",\"GPRS\""); 
     delay(2000);
@@ -157,14 +166,14 @@ void conexaoHTTPGET()
     Serial.println("Resultado:");  
     ShowSerialData();
     Serial.println("");
-
+  
     Serial.println("Comando: AT+SAPBR=1,1"); 
     Serial1.println("AT+SAPBR=1,1"); 
     delay(10000);
     Serial.println("Resultado:");  
     ShowSerialData();
     Serial.println("");
-    
+
     Serial.println("Comando: AT+SAPBR=2,1"); 
     Serial1.println("AT+SAPBR=2,1"); 
     delay(2000);
@@ -187,10 +196,11 @@ void conexaoHTTPGET()
     Serial.println("");
     
     Serial.println("Comando: AT+HTTPPARA"); 
-    //Serial1.println("AT+HTTPPARA=\"URL\",\"www.m2msupport.net/m2msupport/http_get_test.php\"");
-    //Serial1.println("AT+HTTPPARA=\"URL\",\"www.sim.com\"");
     //Serial1.println("AT+HTTPPARA=\"URL\",\"sdo-server.herokuapp.com/find/bus/position/byLicensePlate/JFJ-1593\""); //Buscar localizações por placa
-    Serial1.println("AT+HTTPPARA=\"URL\",\"sdo-server.herokuapp.com/find/bus/position/byLineItinerary/813.1\""); //Buscar localizações por Linha
+    //Serial1.println("AT+HTTPPARA=\"URL\",\"sdo-server.herokuapp.com/find/bus/position/byLineItinerary/813.1\""); //Buscar localizações por Linha
+    //Cadastra dados
+    Serial1.println("AT+HTTPPARA=\"URL\",\"sdo-server.herokuapp.com/save/bus/position?latitude=-52.694177&longitude=-62.790577&date=07/10/2014%2022:15:00&speed=70&positionSense=TO_START_POINT&licensePlate=JJJ-6543&busNumber=8976000&capacity=40&routeNumber=0.150&startPoint=Cruzeiro&endPoint=Rod%20P%20Piloto\""); 
+    
     delay(10000);
     Serial.println("Resultado:");  
     ShowSerialData();
@@ -220,188 +230,6 @@ void conexaoHTTPGET()
     
     Serial.println("Comando: AT+HTTPTERM"); 
     Serial1.println("AT+HTTPTERM"); 
-    delay(5000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-
-/*   
-    Serial.println("Comando: AT+SAPBR=0,1"); 
-    Serial1.println("AT+SAPBR=0,1"); 
-    delay(2000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-*/
-}
-
-/*
-void conexaoHTTPGETBySite()
-{
-    Serial.println("Comando: AT+SAPBR=3,1,\"Contype\",\"GPRS\"");
-    Serial1.println("AT+SAPBR=3,1,\"Contype\",\"GPRS\""); 
-    delay(2000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-    
-    Serial.println("Comando: AT+SAPBR=3,1,\"APN\",\"yourAPN\""); 
-    Serial1.println("AT+SAPBR=3,1,\"APN\",\"claro.com.br\""); 
-    delay(2000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-    
-    Serial.println("Comando: AT+SAPBR=3,1,\"USER\",\"yourUser\"");
-    Serial1.println("AT+SAPBR=3,1,\"USER\",\"claro\""); 
-    delay(2000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-
-    Serial.println("Comando: AT+SAPBR=3,1,\"PWD\",\"YourPWD\"");
-    Serial1.println("AT+SAPBR=3,1,\"PWD\",\"claro\""); 
-    delay(2000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-
-    Serial.println("Comando: AT+SAPBR=1,1"); 
-    Serial1.println("AT+SAPBR=1,1"); 
-    delay(10000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-    
-    Serial.println("Comando: AT+SAPBR=2,1"); 
-    Serial1.println("AT+SAPBR=2,1"); 
-    delay(2000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-    Serial1.println("AT+CMEE=2"); 
-
-    Serial.println("Comando: AT+HTTPINIT"); 
-    Serial1.println("AT+HTTPINIT"); 
-    delay(5000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-    Serial.println("Comando: AT+CMEE=2"); 
-
-    Serial.println("Comando: AT+HTTPPARA"); 
-    Serial1.println("AT+HTTPARA=\"CID,1\""); 
-    delay(5000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-    Serial.println("Comando: AT+CMEE=2"); 
-    
-    Serial.println("Comando: AT+HTTPPARA"); 
-    Serial1.println("AT+HTTPPARA=\"URL\",\"www.m2msupport.net/m2msupport/test.php\"");  
-    delay(5000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-    Serial.println("Comando: AT+CMEE=2"); 
-
-    Serial.println("Comando: AT+HTTPACTION=0"); 
-    Serial1.println("AT+HTTPACTION=0"); 
-    delay(10000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-    Serial.println("Comando: AT+CMEE=2"); 
-   
-   
-    Serial.println("Comando: AT+HTTPREAD"); 
-    Serial1.println("AT+HTTPREAD"); 
-    delay(10000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-    Serial.println("Comando: AT+CMEE=2"); 
-
-    
-    Serial.println("Comando: AT+HTTPTERM"); 
-    Serial1.println("AT+HTTPTERM"); 
-    delay(5000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-    Serial.println("Comando: AT+CMEE=2"); 
-}
-*/
-void conexaoHTTP()
-{
-  /*  
-    Serial.println("Comando: AT+CREG?"); //verifica se chip está registrado
-    Serial1.println("AT+CREG?"); 
-    delay(1000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-    
-    Serial.println("Comando: AT+CGATT?"); //verifica se GPRS está ligado ou não
-    Serial1.println("AT+CGATT?"); 
-    delay(1000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-    
-    Serial.println("Comando: AT+CIPSHUT"); //Reseta a sessão do IP, se existir
-    Serial1.println("AT+CIPSHUT"); 
-    delay(1000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-      
-*/ 
-
-    Serial.println("Comando: AT+SAPBR=3,1,\"Contype\",\"GPRS\"");
-    Serial1.println("AT+SAPBR=3,1,\"Contype\",\"GPRS\""); 
-    delay(2000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-    
-    Serial.println("Comando: AT+SAPBR=3,1,\"APN\",\"yourAPN\""); 
-    Serial1.println("AT+SAPBR=3,1,\"APN\",\"claro.com.br\""); 
-    delay(2000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-
-    Serial.println("Comando: AT+SAPBR=3,1,\"USER\",\"yourUser\"");
-    Serial1.println("AT+SAPBR=3,1,\"USER\",\"claro\""); 
-    delay(2000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-
-    Serial.println("Comando: AT+SAPBR=3,1,\"PWD\",\"YourPWD\"");
-    Serial1.println("AT+SAPBR=3,1,\"PWD\",\"claro\""); 
-    delay(2000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-
-    Serial.println("Comando: AT+SAPBR=1,1"); 
-    Serial1.println("AT+SAPBR=1,1"); 
-    delay(5000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-    
-    Serial.println("Comando: AT+SAPBR=2,1"); 
-    Serial1.println("AT+SAPBR=2,1"); 
-    delay(2000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-
-    Serial.println("Comando: AT+HTTPINIT"); 
-    Serial1.println("AT+HTTPINIT"); 
     delay(5000);
     Serial.println("Resultado:");  
     ShowSerialData();
