@@ -142,10 +142,13 @@ int nmeaStringCount = 0;
 /************ INICIO - BLOCO DE CONFIGURAÇÃO DE VARIÁVEIS PARA LER DATA ***********************/
 
 String date;
+String hour;
 boolean isGPRMC = false;
+boolean isDot = false;
 byte commaNumber = 0;
 byte countGPRMC = 0;
 byte formatDate = 0;
+byte formatHour = 0;
 
 /************ FIM - BLOCO DE CONFIGURAÇÃO DE VARIÁVEIS PARA LER DATA ***********************/
 
@@ -160,7 +163,7 @@ void getLocalSDData(); //pega os dados gravados no cartão SD
 void saveNmeaFile(String data); //função para salvar arquivo nmea
 void blinkSucessLed(); //função para piscar led sinalizando sucesso de leitura de dados do GPS
 void blinkErrorLed(); //função para piscar led sinalizando erro de leitura de dados do GPS
-void getDate(char leitura); //Função para leitura e formatação de data
+void getDateHour(char leitura); //Função para pegar data e hora no formato esperado pelo servidor
 
 void setup(){
   
@@ -218,7 +221,7 @@ void loop(){
     // Lê caracteres vindos do GPS na porta Serial 1
     char leitura = Serial1.read();
     
-    getDate(leitura);
+    getDateHour(leitura);
     
     dataString += String(leitura);
     nmeaStringCount ++;
@@ -239,8 +242,9 @@ void loop(){
       { 
         latitude = gps.gprmc_latitude();
         longitude = gps.gprmc_longitude();
-        hora = gps.gprmc_utc();
+        //hora = gps.gprmc_utc();
         velocidade = gps.gprmc_speed(KMPH);
+        String dateHour = date+" "+hour;
 
         Serial.print("Latitude: ");
         Serial.println(latitude, DEC); //Recupera Latitude
@@ -248,11 +252,8 @@ void loop(){
         Serial.print("Longitude: ");
         Serial.println(longitude, DEC);//Recupera Longitude
         
-        Serial.print("Data: ");
-        Serial.println(date);//Recupera data
-        
-        Serial.print("Hora: ");
-        Serial.println(hora);//Recupera hora
+        Serial.print("Data Hora: ");
+        Serial.println(dateHour);//Recupera data
         
         Serial.print("Velocidade: ");
         Serial.println(velocidade );//Recupera velocidade
@@ -420,9 +421,9 @@ void blinkErrorLed()
 }
 
 
-void getDate(char leitura) //Função para leitura e formatação de data
+void getDateHour(char leitura)
 {
-  //$GPRMC,225446,A,4916.45,N,12311.12,W,000.5,054.7,191194,020.3,E*68
+    //$GPRMC,225446.000,A,4916.45,N,12311.12,W,000.5,054.7,191194,020.3,E*68
     
   if(leitura == '$' && isGPRMC == false)
     {
@@ -456,6 +457,7 @@ void getDate(char leitura) //Função para leitura e formatação de data
     if(countGPRMC == 6) //encontrou o cabeçalho $GPRMC
     {
        date = "";
+       hour = "";
        isGPRMC = true;
     }
     
@@ -464,6 +466,26 @@ void getDate(char leitura) //Função para leitura e formatação de data
       commaNumber++;
     }
     
+    
+    if(commaNumber == 1) // a hora se encontra após a primeira virgula
+    {
+      if(leitura == '.') //verificação para não receber milessimos no momento de coletar hora
+      {
+        isDot = true;
+      }
+      
+      if(leitura != ',' && isDot == false) //para não pegar a virgula que antecede a hora
+      { 
+        if(formatHour == 2)
+          hour += ":";
+        if(formatHour == 4)
+          hour += ":";
+          
+        hour += leitura;
+        formatHour ++;
+      }
+    }
+      
     if(commaNumber == 9) // a data se encontra após a nona virgula
     {
       if(leitura != ',') //para não pegar a virgula que antecede a data
@@ -482,8 +504,9 @@ void getDate(char leitura) //Função para leitura e formatação de data
     {
       commaNumber = 0;
       isGPRMC = false;
+      isDot = false;
       countGPRMC = 0;
       formatDate = 0;
+      formatHour = 0;
     }
 }
-

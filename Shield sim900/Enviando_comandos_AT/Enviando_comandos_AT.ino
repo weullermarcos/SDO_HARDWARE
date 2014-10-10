@@ -86,8 +86,8 @@ void conexaoHTTPPOST()
     Serial.println("");    
 
     Serial.println("Comando: AT+HTTPPARA");  
-    //Serial1.println("AT+HTTPPARA=\"CONTENT\",\"application/x-www-form-urlencoded\"");
-    Serial1.println("AT+HTTPPARA=\"CONTENT\",\"application/json\"");   
+    Serial1.println("AT+HTTPPARA=\"CONTENT\",\"application/x-www-form-urlencoded\"");
+    //Serial1.println("AT+HTTPPARA=\"CONTENT\",\"application/json\"");   
     delay(2000);
     Serial.println("Resultado:");  
     ShowSerialData();

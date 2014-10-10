@@ -13,6 +13,7 @@ float longitude;
 float hora;
 float velocidade;
 String data;
+String horaFormatada;
 
 void setup()
 {
@@ -22,12 +23,16 @@ void setup()
 }
 
 boolean isGPRMC = false;
+boolean isDot = false;
 byte commaNumber = 0;
 byte countGPRMC = 0;
 byte formatDate = 0;
+byte formatHour = 0;
 
-void getDate(char leitura)
+void getDateHour(char leitura)
 {
+    //$GPRMC,225446.000,A,4916.45,N,12311.12,W,000.5,054.7,191194,020.3,E*68
+    
   if(leitura == '$' && isGPRMC == false)
     {
       countGPRMC ++;
@@ -60,6 +65,7 @@ void getDate(char leitura)
     if(countGPRMC == 6) //encontrou o cabeçalho $GPRMC
     {
        data = "";
+       horaFormatada = "";
        isGPRMC = true;
     }
     
@@ -68,6 +74,26 @@ void getDate(char leitura)
       commaNumber++;
     }
     
+    
+    if(commaNumber == 1) // a hora se encontra após a primeira virgula
+    {
+      if(leitura == '.') //verificação para não receber milessimos no momento de coletar hora
+      {
+        isDot = true;
+      }
+      
+      if(leitura != ',' && isDot == false) //para não pegar a virgula que antecede a hora
+      { 
+        if(formatHour == 2)
+          horaFormatada += ":";
+        if(formatHour == 4)
+          horaFormatada += ":";
+          
+        horaFormatada += leitura;
+        formatHour ++;
+      }
+    }
+      
     if(commaNumber == 9) // a data se encontra após a nona virgula
     {
       if(leitura != ',') //para não pegar a virgula que antecede a data
@@ -86,20 +112,21 @@ void getDate(char leitura)
     {
       commaNumber = 0;
       isGPRMC = false;
+      isDot = false;
       countGPRMC = 0;
       formatDate = 0;
+      formatHour = 0;
     }
 }
 
 void loop()
 {
-  //$GPRMC,225446,A,4916.45,N,12311.12,W,000.5,054.7,191194,020.3,E*68
   if (Serial1.available() > 0 ) {
     
     //  Lê caracteres vindos do GPS
     char leitura = Serial1.read();
     
-    getDate(leitura);
+    getDateHour(leitura);
     
     //  Verifica se o valor recebido e uma sentença GPS valida
     if (gps.decode(leitura)) {
@@ -110,9 +137,9 @@ void loop()
         
         latitude = gps.gprmc_latitude();
         longitude = gps.gprmc_longitude();
-        hora = gps.gprmc_utc();
+        //hora = gps.gprmc_utc(); //hora no formato flutuante
         velocidade = gps.gprmc_speed(KMPH);
-        
+                
         Serial.print("Latitude: ");
         Serial.println(latitude, DEC); //Recupera Latitude
         
@@ -123,7 +150,10 @@ void loop()
         Serial.println(data);//Recupera data
         
         Serial.print("Hora: ");
-        Serial.println(hora);//Recupera hora
+        Serial.println(horaFormatada);//Recupera hora
+        
+        Serial.print("Data Hora: ");
+        Serial.println(data+" "+horaFormatada);//Recupera hora
         
         Serial.print("Velocidade: ");
         Serial.println(velocidade );//Recupera velocidade
