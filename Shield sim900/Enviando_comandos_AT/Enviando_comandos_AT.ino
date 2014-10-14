@@ -7,8 +7,8 @@ void setup()
   Serial.println("vamos comecar...");
   Serial.println("**********************************************************************************************");
   
-  conexaoHTTPPOST();
-  //conexaoHTTPGET();
+  //conexaoHTTPPOST();
+  conexaoHTTPGET();
 }
 char aux;
 void loop ()
@@ -199,7 +199,7 @@ void conexaoHTTPGET()
     //Serial1.println("AT+HTTPPARA=\"URL\",\"sdo-server.herokuapp.com/find/bus/position/byLicensePlate/JFJ-1593\""); //Buscar localizações por placa
     //Serial1.println("AT+HTTPPARA=\"URL\",\"sdo-server.herokuapp.com/find/bus/position/byLineItinerary/813.1\""); //Buscar localizações por Linha
     //Cadastra dados
-    Serial1.println("AT+HTTPPARA=\"URL\",\"sdo-server.herokuapp.com/save/bus/position?latitude=-52.694177&longitude=-62.790577&date=07/10/2014%2022:15:00&speed=70&positionSense=TO_START_POINT&licensePlate=JJJ-6543&busNumber=8976000&capacity=40&routeNumber=0.150&startPoint=Cruzeiro&endPoint=Rod%20P%20Piloto\""); 
+    Serial1.println("AT+HTTPPARA=\"URL\",\"sdo-server.herokuapp.com/save/bus/position?latitude=-52.694177&longitude=-62.790577&date=11/10/2014%2012:59:00&speed=80&positionSense=TO_START_POINT&licensePlate=WWW-2525&busNumber=12345678&capacity=100&routeNumber=0.809&startPoint=Recanto%20das%20Emas&endPoint=Rod%20P%20Piloto\""); 
     
     delay(10000);
     Serial.println("Resultado:");  

@@ -142,13 +142,10 @@ int nmeaStringCount = 0;
 /************ INICIO - BLOCO DE CONFIGURAÇÃO DE VARIÁVEIS PARA LER DATA ***********************/
 
 String date;
-String hour;
 boolean isGPRMC = false;
-boolean isDot = false;
 byte commaNumber = 0;
 byte countGPRMC = 0;
 byte formatDate = 0;
-byte formatHour = 0;
 
 /************ FIM - BLOCO DE CONFIGURAÇÃO DE VARIÁVEIS PARA LER DATA ***********************/
 
@@ -163,12 +160,19 @@ void getLocalSDData(); //pega os dados gravados no cartão SD
 void saveNmeaFile(String data); //função para salvar arquivo nmea
 void blinkSucessLed(); //função para piscar led sinalizando sucesso de leitura de dados do GPS
 void blinkErrorLed(); //função para piscar led sinalizando erro de leitura de dados do GPS
-void getDateHour(char leitura); //Função para pegar data e hora no formato esperado pelo servidor
+void getDate(char leitura); //Função para pegar data e hora no formato esperado pelo servidor
+void sendDataToServer(String url); //Função para enviar dados ao servidor
+void ShowSerialData(); //Função para ler resposta da shield GSM 
 
 void setup(){
   
-  Serial.begin(38400);
-  Serial1.begin(38400); //habilitando serial1 para ler dados do GPS
+  Serial.begin(9600);
+  Serial1.begin(9600); //habilitando Serial2 para enviar dados via GSM
+  Serial2.begin(38400); //habilitando Serial2 para ler dados do GPS
+  
+  //sendDataToServer(""); //teste
+  
+  
   lcd.begin(16, 2); //Setando número de colunas e linhas do Display LCD --- 16 colunas, 2 linhas
   initialDisplayMessage();
   
@@ -216,12 +220,12 @@ void setup(){
 void loop(){
   
   /*******************COLETANDO DADOS DO GPS***********************************/
-  if (Serial1.available() > 0 ) {
+  if (Serial2.available() > 0 ) {
     
     // Lê caracteres vindos do GPS na porta Serial 1
-    char leitura = Serial1.read();
+    char leitura = Serial2.read();
     
-    getDateHour(leitura);
+    getDate(leitura);
     
     dataString += String(leitura);
     nmeaStringCount ++;
@@ -242,15 +246,29 @@ void loop(){
       { 
         latitude = gps.gprmc_latitude();
         longitude = gps.gprmc_longitude();
-        //hora = gps.gprmc_utc();
+        hora = gps.gprmc_utc();
         velocidade = gps.gprmc_speed(KMPH);
+        
+        //date = "12/10/2014"; //TESTE -- REMOVER DATA DEPOIS
+        
+        char newHour[6];
+        dtostrf(hora, 6, 0, newHour);
+        String hour;
+        hour+= String(newHour[0]) + String(newHour[1]) + ":" + String(newHour[2]) + String(newHour[3]) + ":" + String(newHour[4]) + String(newHour[5]);
+        
         String dateHour = date+" "+hour;
 
         Serial.print("Latitude: ");
         Serial.println(latitude, DEC); //Recupera Latitude
-        
+                
         Serial.print("Longitude: ");
         Serial.println(longitude, DEC);//Recupera Longitude
+        
+        Serial.print("Data: ");
+        Serial.println(date);//Recupera data
+        
+        Serial.print("Hora: ");
+        Serial.println(hour);//Recupera data
         
         Serial.print("Data Hora: ");
         Serial.println(dateHour);//Recupera data
@@ -269,9 +287,32 @@ void loop(){
   
         Serial.print("Numero de Passageiros:");
         Serial.println(nPassageiros);
-        
         Serial.println("");
+
+        char latAux[10];
+        char longAux[10];
+        char speedAux[4];
+
+        dtostrf(latitude, 10, 6, latAux);
+        String url = "sdo-server.herokuapp.com/save/bus/position?";
+        url+="latitude="+ String(latAux);
+        dtostrf(longitude, 10, 6, longAux);
+        url+="&longitude=" + String(longAux);
+        url+="&date="+date+"%20"+hour;
+        dtostrf(velocidade, 4, 2, speedAux);
+        url+="&speed="+ String(speedAux);
+        url+="&positionSense=TO_END_POINT";
+        url+="&licensePlate=" + placa;
+        url+="&busNumber="+ nOnibus;
+        url+="&capacity="+ nPassageiros;
+        url+="&routeNumber=" + String(lineNumber);
+        url+="&startPoint=XXXXXX";
+        url+="&endPoint=YYYYY";       
         
+        Serial.println(url);
+        
+        sendDataToServer(url);
+
         blinkSucessLed();
        }
        else
@@ -420,32 +461,31 @@ void blinkErrorLed()
   digitalWrite(GET_GPS_DATA_WITH_ERROR_LED, LOW);
 }
 
-
-void getDateHour(char leitura)
+void getDate(char leitura)
 {
-    //$GPRMC,225446.000,A,4916.45,N,12311.12,W,000.5,054.7,191194,020.3,E*68
-    
-  if(leitura == '$' && isGPRMC == false)
+  //$GPRMC,225446.000,A,4916.45,N,12311.12,W,000.5,054.7,191194,020.3,E*68
+  
+  if(leitura == '$')
     {
       countGPRMC ++;
     }
-    else if (leitura == 'G' && isGPRMC == false)
+    else if (leitura == 'G')
     {
       countGPRMC ++;
     }
-    else if (leitura == 'P' && isGPRMC == false)
+    else if (leitura == 'P')
     {
       countGPRMC ++;
     }
-    else if (leitura == 'R' && isGPRMC == false)
+    else if (leitura == 'R')
     {
       countGPRMC ++;
     }
-    else if (leitura == 'M' && isGPRMC == false)
+    else if (leitura == 'M')
     {
       countGPRMC ++;
     }
-    else if (leitura == 'C' && isGPRMC == false)
+    else if (leitura == 'C')
     {
       countGPRMC ++;
     }
@@ -457,33 +497,13 @@ void getDateHour(char leitura)
     if(countGPRMC == 6) //encontrou o cabeçalho $GPRMC
     {
        date = "";
-       hour = "";
        isGPRMC = true;
+       commaNumber = 0;
     }
     
     if(leitura == ',' && isGPRMC) //contando o numero de virgulas para achar a data apos a nona virgula
     {
       commaNumber++;
-    }
-    
-    
-    if(commaNumber == 1) // a hora se encontra após a primeira virgula
-    {
-      if(leitura == '.') //verificação para não receber milessimos no momento de coletar hora
-      {
-        isDot = true;
-      }
-      
-      if(leitura != ',' && isDot == false) //para não pegar a virgula que antecede a hora
-      { 
-        if(formatHour == 2)
-          hour += ":";
-        if(formatHour == 4)
-          hour += ":";
-          
-        hour += leitura;
-        formatHour ++;
-      }
     }
       
     if(commaNumber == 9) // a data se encontra após a nona virgula
@@ -504,9 +524,114 @@ void getDateHour(char leitura)
     {
       commaNumber = 0;
       isGPRMC = false;
-      isDot = false;
       countGPRMC = 0;
       formatDate = 0;
-      formatHour = 0;
     }
 }
+
+void sendDataToServer(String url)
+{  
+    Serial.println("---------Enviando dados---------");
+               
+    Serial.println("Comando: AT+SAPBR=3,1,\"Contype\",\"GPRS\"");
+    Serial1.println("AT+SAPBR=3,1,\"Contype\",\"GPRS\""); 
+    delay(1000);
+    Serial.println("Resultado:");  
+    ShowSerialData();
+    Serial.println("");
+    
+    Serial.println("Comando: AT+SAPBR=3,1,\"APN\",\"yourAPN\""); 
+    Serial1.println("AT+SAPBR=3,1,\"APN\",\"claro.com.br\""); 
+    delay(1000);
+    Serial.println("Resultado:");  
+    ShowSerialData();
+    Serial.println("");
+    
+    Serial.println("Comando: AT+SAPBR=3,1,\"USER\",\"yourUser\"");
+    Serial1.println("AT+SAPBR=3,1,\"USER\",\"claro\""); 
+    delay(1000);
+    Serial.println("Resultado:");  
+    ShowSerialData();
+    Serial.println("");
+
+    Serial.println("Comando: AT+SAPBR=3,1,\"PWD\",\"YourPWD\"");
+    Serial1.println("AT+SAPBR=3,1,\"PWD\",\"claro\""); 
+    delay(1000);
+    Serial.println("Resultado:");  
+    ShowSerialData();
+    Serial.println("");
+  
+    Serial.println("Comando: AT+SAPBR=1,1"); 
+    Serial1.println("AT+SAPBR=1,1"); 
+    delay(5000);
+    Serial.println("Resultado:");  
+    ShowSerialData();
+    Serial.println("");
+
+    Serial.println("Comando: AT+SAPBR=2,1"); 
+    Serial1.println("AT+SAPBR=2,1"); 
+    delay(1000);
+    Serial.println("Resultado:");  
+    ShowSerialData();
+    Serial.println("");
+
+    Serial.println("Comando: AT+HTTPINIT"); 
+    Serial1.println("AT+HTTPINIT"); 
+    delay(5000);
+    Serial.println("Resultado:");  
+    ShowSerialData();
+    Serial.println("");
+    
+    Serial.println("Comando: AT+HTTPPARA"); 
+    Serial1.println("AT+HTTPARA=\"CID,1\""); 
+    delay(1000);
+    Serial.println("Resultado:");  
+    ShowSerialData();
+    Serial.println("");
+    
+    Serial.println("Comando: AT+HTTPPARA"); 
+    //Serial1.println("AT+HTTPPARA=\"URL\",\"sdo-server.herokuapp.com/save/bus/position?latitude=-52.694177&longitude=-62.790577&date=11/10/2014%2012:59:00&speed=80&positionSense=TO_START_POINT&licensePlate=WWW-2525&busNumber=12345678&capacity=100&routeNumber=0.809&startPoint=Recanto%20das%20Emas&endPoint=Rod%20P%20Piloto\"");  
+    Serial1.println("AT+HTTPPARA=\"URL\",\""+url+"\""); 
+    
+    delay(5000);
+    Serial.println("Resultado:");  
+    ShowSerialData();
+    Serial.println("");
+   
+    Serial.println("Comando: AT+HTTPACTION=0"); 
+    Serial1.println("AT+HTTPACTION=0"); 
+    delay(5000);
+    Serial.println("Resultado:");  
+    ShowSerialData();
+    Serial.println("");
+    
+    /*verificando status da conexão HTTP*/
+    Serial.println("Comando: AT+HTTPSTATUS?");  
+    Serial1.println("AT+HTTPSTATUS?"); 
+    delay(1000);
+    Serial.println("Resultado:");  
+    ShowSerialData();
+    Serial.println("");
+   
+    Serial.println("Comando: AT+HTTPREAD"); 
+    Serial1.println("AT+HTTPREAD"); 
+    delay(5000);
+    Serial.println("Resultado:");  
+    ShowSerialData();
+    Serial.println("");
+    
+    Serial.println("Comando: AT+HTTPTERM"); 
+    Serial1.println("AT+HTTPTERM"); 
+    delay(1000);
+    Serial.println("Resultado:");  
+    ShowSerialData();
+    Serial.println("");
+}
+
+void ShowSerialData()
+{
+  while(Serial1.available()!=0)
+    Serial.write(Serial1.read());
+}
+
+
