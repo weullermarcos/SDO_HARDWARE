@@ -535,72 +535,72 @@ void sendDataToServer(String url)
                
     Serial.println("Comando: AT+SAPBR=3,1,\"Contype\",\"GPRS\"");
     Serial1.println("AT+SAPBR=3,1,\"Contype\",\"GPRS\""); 
-    delay(1000);
+    delay(500);
     Serial.println("Resultado:");  
     ShowSerialData();
     Serial.println("");
     
     Serial.println("Comando: AT+SAPBR=3,1,\"APN\",\"yourAPN\""); 
     Serial1.println("AT+SAPBR=3,1,\"APN\",\"claro.com.br\""); 
-    delay(1000);
+    delay(500);
     Serial.println("Resultado:");  
     ShowSerialData();
     Serial.println("");
     
     Serial.println("Comando: AT+SAPBR=3,1,\"USER\",\"yourUser\"");
     Serial1.println("AT+SAPBR=3,1,\"USER\",\"claro\""); 
-    delay(1000);
+    delay(500);
     Serial.println("Resultado:");  
     ShowSerialData();
     Serial.println("");
 
     Serial.println("Comando: AT+SAPBR=3,1,\"PWD\",\"YourPWD\"");
     Serial1.println("AT+SAPBR=3,1,\"PWD\",\"claro\""); 
-    delay(1000);
+    delay(500);
     Serial.println("Resultado:");  
     ShowSerialData();
     Serial.println("");
   
     Serial.println("Comando: AT+SAPBR=1,1"); 
     Serial1.println("AT+SAPBR=1,1"); 
-    delay(5000);
+    delay(500);
     Serial.println("Resultado:");  
     ShowSerialData();
     Serial.println("");
 
     Serial.println("Comando: AT+SAPBR=2,1"); 
     Serial1.println("AT+SAPBR=2,1"); 
-    delay(1000);
+    delay(500);
     Serial.println("Resultado:");  
     ShowSerialData();
     Serial.println("");
 
     Serial.println("Comando: AT+HTTPINIT"); 
     Serial1.println("AT+HTTPINIT"); 
-    delay(5000);
-    Serial.println("Resultado:");  
-    ShowSerialData();
-    Serial.println("");
-    
-    Serial.println("Comando: AT+HTTPPARA"); 
-    Serial1.println("AT+HTTPARA=\"CID,1\""); 
     delay(1000);
     Serial.println("Resultado:");  
     ShowSerialData();
     Serial.println("");
     
     Serial.println("Comando: AT+HTTPPARA"); 
-    //Serial1.println("AT+HTTPPARA=\"URL\",\"sdo-server.herokuapp.com/save/bus/position?latitude=-52.694177&longitude=-62.790577&date=11/10/2014%2012:59:00&speed=80&positionSense=TO_START_POINT&licensePlate=WWW-2525&busNumber=12345678&capacity=100&routeNumber=0.809&startPoint=Recanto%20das%20Emas&endPoint=Rod%20P%20Piloto\"");  
+    Serial1.println("AT+HTTPARA=\"CID,1\""); 
+    delay(500);
+    Serial.println("Resultado:");  
+    ShowSerialData();
+    Serial.println("");
+    
+    Serial.println("Comando: AT+HTTPPARA"); 
+    //Serial1.println("AT+HTTPPARA=\"URL\",\"sdo-server.herokuapp.com/save/bus/position?latitude=-52.694177&longitude=-62.7c90577&date=11/10/2014%2012:59:00&speed=80&positionSense=TO_START_POINT&licensePlate=WWW-2525&busNumber=12345678&capacity=100&routeNumber=0.809&startPoint=Recanto%20das%20Emas&endPoint=Rod%20P%20Piloto\"");  
     Serial1.println("AT+HTTPPARA=\"URL\",\""+url+"\""); 
     
-    delay(5000);
+    delay(1500);
     Serial.println("Resultado:");  
     ShowSerialData();
     Serial.println("");
    
     Serial.println("Comando: AT+HTTPACTION=0"); 
     Serial1.println("AT+HTTPACTION=0"); 
-    delay(5000);
+    delay(1000);
     Serial.println("Resultado:");  
     ShowSerialData();
     Serial.println("");
@@ -615,14 +615,14 @@ void sendDataToServer(String url)
    
     Serial.println("Comando: AT+HTTPREAD"); 
     Serial1.println("AT+HTTPREAD"); 
-    delay(5000);
+    delay(1500);
     Serial.println("Resultado:");  
-    ShowSerialData();
+    ShowSerialData(); 
     Serial.println("");
     
     Serial.println("Comando: AT+HTTPTERM"); 
     Serial1.println("AT+HTTPTERM"); 
-    delay(1000);
+    delay(500);
     Serial.println("Resultado:");  
     ShowSerialData();
     Serial.println("");
